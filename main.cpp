@@ -26,7 +26,7 @@ vector<Mat> SySq(TOTAL_IMAGES);
 vector<Mat> Sxy(TOTAL_IMAGES);
 vector<Mat> R;
 vector<vector<Feature_Point>> features(TOTAL_IMAGES);
-vector<vector<pair<int,int>>> good_matches(TOTAL_IMAGES);
+vector<vector<pair<Feature_Point,Feature_Point>>> good_matches(TOTAL_IMAGES);
 
 int readImages();
 void shrinkImages(const double m);
@@ -270,7 +270,7 @@ void match_fp(){
         Mat window2 = src[z+1].clone();
         for(int i=0; i < features[z].size(); i++){
             if( matchingpoints[i].second <= max(2*min_dist, 20000)){
-                good_matches[z].push_back(make_pair(i, matchingpoints[i].first));
+                good_matches[z].push_back(make_pair(features[z][i], features[z+1][matchingpoints[i].first]));
                 circle( window1, Point( features[z][i].y, features[z][i].x ), 5, Scalar(20,20,255), 2, 8, 0 );
                 circle( window2, Point( features[z+1][matchingpoints[i].first].y, features[z+1][matchingpoints[i].first].x ), 5, Scalar(20,20,255), 2, 8, 0 );
             }
