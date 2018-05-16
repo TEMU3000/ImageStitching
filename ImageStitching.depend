@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1526398045 source:d:\y.c.lai\csie_google drive\ntu\digivfx\hw2\imagestitching\main.cpp
+1526497742 source:d:\y.c.lai\csie_google drive\ntu\digivfx\hw2\imagestitching\main.cpp
 	<opencv2/core/core.hpp>
 	<opencv2/opencv.hpp>
 	<opencv2/imgproc/imgproc.hpp>
 	<opencv2/highgui/highgui.hpp>
 	<vector>
 	<utility>
+	<cmath>
 
 1449835036 c:\users\y.c.lai\opencv\build\include\opencv2\core\core.hpp
 	"opencv2/core.hpp"
