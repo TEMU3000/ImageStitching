@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
         printf("Error reading image files!\n");
         return -1;
     };
-    //shrinkImages(0.15);
+    shrinkImages(0.5);
 
     intensity();
     gradient();
@@ -78,32 +78,20 @@ int main(int argc, char *argv[])
 
 int readImages(){
     printf("Reading image files ...\n");
-    /*src[0] = imread("set4/DSC_0014.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[0].empty()) return -1;
-    src[1] = imread("set4/DSC_0015.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[1].empty()) return -1;
-    src[2] = imread("set4/DSC_0016.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[2].empty()) return -1;
-    src[3] = imread("set4/DSC_0017.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[3].empty()) return -1;
-    src[4] = imread("set4/DSC_0018.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[4].empty()) return -1;
-    src[5] = imread("set4/DSC_0019.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[5].empty()) return -1;
-    src[6] = imread("set4/DSC_0020.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[6].empty()) return -1;
-    src[7] = imread("set4/DSC_0021.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[7].empty()) return -1;
-    src[8] = imread("set4/DSC_0022.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[8].empty()) return -1;
-    src[9] = imread("set4/DSC_0023.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[9].empty()) return -1;
-    src[10] = imread("set4/DSC_0024.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[10].empty()) return -1;
-    src[11] = imread("set4/DSC_0025.jpg", CV_LOAD_IMAGE_COLOR);
-    if(src[11].empty()) return -1;*/
+    /*src[0] = imread("set4/DSC_0014.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    src[1] = imread("set4/DSC_0015.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
+    src[2] = imread("set4/DSC_0016.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
+    src[3] = imread("set4/DSC_0017.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
+    src[4] = imread("set4/DSC_0018.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
+    src[5] = imread("set4/DSC_0019.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
+    src[6] = imread("set4/DSC_0020.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
+    src[7] = imread("set4/DSC_0021.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
+    src[8] = imread("set4/DSC_0022.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
+    src[9] = imread("set4/DSC_0023.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
+    src[10] = imread("set4/DSC_0024.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;
+    src[11] = imread("set4/DSC_0025.jpg", CV_LOAD_IMAGE_COLOR); if(src[11].empty()) return -1;*/
 
-    src[0] = imread("parrington/prtn00.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    /*src[0] = imread("parrington/prtn00.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("parrington/prtn01.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
     src[2] = imread("parrington/prtn02.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
     src[3] = imread("parrington/prtn03.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
@@ -120,7 +108,49 @@ int readImages(){
     src[14] = imread("parrington/prtn14.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
     src[15] = imread("parrington/prtn15.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
     src[16] = imread("parrington/prtn16.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
-    src[17] = imread("parrington/prtn17.jpg", CV_LOAD_IMAGE_COLOR); if(src[17].empty()) return -1;
+    src[17] = imread("parrington/prtn17.jpg", CV_LOAD_IMAGE_COLOR); if(src[17].empty()) return -1;*/
+
+    /*src[0] = imread("set1/DSC_0256.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    src[1] = imread("set1/DSC_0257.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
+    src[2] = imread("set1/DSC_0258.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
+    src[3] = imread("set1/DSC_0259.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
+    src[4] = imread("set1/DSC_0260.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
+    src[5] = imread("set1/DSC_0261.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
+    src[6] = imread("set1/DSC_0262.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
+    src[7] = imread("set1/DSC_0263.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
+    src[8] = imread("set1/DSC_0264.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
+    src[9] = imread("set1/DSC_0265.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;*/
+
+    /*src[0] = imread("set2/DSC_0172.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    src[1] = imread("set2/DSC_0173.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
+    src[2] = imread("set2/DSC_0174.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
+    src[3] = imread("set2/DSC_0175.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
+    src[4] = imread("set2/DSC_0176.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
+    src[5] = imread("set2/DSC_0177.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
+    src[6] = imread("set2/DSC_0178.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
+    src[7] = imread("set2/DSC_0179.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
+    src[8] = imread("set2/DSC_0180.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
+    src[9] = imread("set2/DSC_0181.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
+    src[10] = imread("set2/DSC_0182.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;*/
+
+    src[0] = imread("set5/DSC_0026.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    src[1] = imread("set5/DSC_0027.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
+    src[2] = imread("set5/DSC_0028.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
+    src[3] = imread("set5/DSC_0029.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
+    src[4] = imread("set5/DSC_0030.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
+    src[5] = imread("set5/DSC_0031.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
+    src[6] = imread("set5/DSC_0032.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
+    src[7] = imread("set5/DSC_0033.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
+    src[8] = imread("set5/DSC_0034.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
+    src[9] = imread("set5/DSC_0035.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
+    src[10] = imread("set5/DSC_0036.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;
+    src[11] = imread("set5/DSC_0037.jpg", CV_LOAD_IMAGE_COLOR); if(src[11].empty()) return -1;
+    src[12] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[12].empty()) return -1;
+    src[13] = imread("set5/DSC_0039.jpg", CV_LOAD_IMAGE_COLOR); if(src[13].empty()) return -1;
+    src[14] = imread("set5/DSC_0040.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
+    src[15] = imread("set5/DSC_0041.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
+    src[16] = imread("set5/DSC_0042.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
+    src[17] = imread("set5/DSC_0043.jpg", CV_LOAD_IMAGE_COLOR); if(src[17].empty()) return -1;
 
     return 0;
 }
@@ -188,7 +218,7 @@ void collect_fp(){
         vector<Feature_Point> image_fp;
         for(int i = 1; i < I[z].rows-1 ; i++ ) {
             for(int j = 1; j < I[z].cols-1 ; j++ ) {
-                if( R[z].at<float>(i,j) > 750000000000.0 ) {
+                if( R[z].at<float>(i,j) > 1000000000000.0 ) {
                     if(R[z].at<float>(i,j) > R[z].at<float>(i-1,j-1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i,j-1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i+1,j-1) &&
@@ -269,7 +299,7 @@ void match_fp(){
         Mat window1 = src[z].clone();
         Mat window2 = src[z+1].clone();
         for(int i=0; i < features[z].size(); i++){
-            if( matchingpoints[i].second <= max(2*min_dist, 20000)){
+            if( matchingpoints[i].second <= max(2*min_dist, 5000)){
                 good_matches[z].push_back(make_pair(features[z][i], features[z+1][matchingpoints[i].first]));
                 circle( window1, Point( features[z][i].y, features[z][i].x ), 5, Scalar(20,20,255), 2, 8, 0 );
                 circle( window2, Point( features[z+1][matchingpoints[i].first].y, features[z+1][matchingpoints[i].first].x ), 5, Scalar(20,20,255), 2, 8, 0 );
