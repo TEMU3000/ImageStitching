@@ -7,9 +7,9 @@
 #include <cmath>
 #include <ctime>
 
-#define TOTAL_IMAGES 17
+#define TOTAL_IMAGES 18
 #define SHRINK_RATIO 0.5
-#define FOCAL_LENGTH 1145.87  //765.96
+#define FOCAL_LENGTH 704.5 //1145.87  //765.96
 
 using namespace cv;
 using namespace std;
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 
     match_fp();
 
-    cylindrical(false);
+    cylindrical(true);
     srand (time(NULL));
     ransac();
 
@@ -111,24 +111,24 @@ int readImages(){
     src[10] = imread("set4/DSC_0024.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;
     src[11] = imread("set4/DSC_0025.jpg", CV_LOAD_IMAGE_COLOR); if(src[11].empty()) return -1;*/
 
-    /*src[0] = imread("parrington/prtn00.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
-    src[1] = imread("parrington/prtn01.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
-    src[2] = imread("parrington/prtn02.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
-    src[3] = imread("parrington/prtn03.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
-    src[4] = imread("parrington/prtn04.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
-    src[5] = imread("parrington/prtn05.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
-    src[6] = imread("parrington/prtn06.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
-    src[7] = imread("parrington/prtn07.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
-    src[8] = imread("parrington/prtn08.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
-    src[9] = imread("parrington/prtn09.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
-    src[10] = imread("parrington/prtn10.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;
-    src[11] = imread("parrington/prtn11.jpg", CV_LOAD_IMAGE_COLOR); if(src[11].empty()) return -1;
-    src[12] = imread("parrington/prtn12.jpg", CV_LOAD_IMAGE_COLOR); if(src[12].empty()) return -1;
-    src[13] = imread("parrington/prtn13.jpg", CV_LOAD_IMAGE_COLOR); if(src[13].empty()) return -1;
-    src[14] = imread("parrington/prtn14.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
-    src[15] = imread("parrington/prtn15.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
-    src[16] = imread("parrington/prtn16.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
-    src[17] = imread("parrington/prtn17.jpg", CV_LOAD_IMAGE_COLOR); if(src[17].empty()) return -1;*/
+    src[0] = imread("parrington/prtn17.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    src[1] = imread("parrington/prtn16.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
+    src[2] = imread("parrington/prtn15.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
+    src[3] = imread("parrington/prtn14.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
+    src[4] = imread("parrington/prtn13.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
+    src[5] = imread("parrington/prtn12.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
+    src[6] = imread("parrington/prtn11.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
+    src[7] = imread("parrington/prtn10.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
+    src[8] = imread("parrington/prtn09.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
+    src[9] = imread("parrington/prtn08.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
+    src[10] = imread("parrington/prtn07.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;
+    src[11] = imread("parrington/prtn06.jpg", CV_LOAD_IMAGE_COLOR); if(src[11].empty()) return -1;
+    src[12] = imread("parrington/prtn05.jpg", CV_LOAD_IMAGE_COLOR); if(src[12].empty()) return -1;
+    src[13] = imread("parrington/prtn04.jpg", CV_LOAD_IMAGE_COLOR); if(src[13].empty()) return -1;
+    src[14] = imread("parrington/prtn03.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
+    src[15] = imread("parrington/prtn02.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
+    src[16] = imread("parrington/prtn01.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
+    src[17] = imread("parrington/prtn00.jpg", CV_LOAD_IMAGE_COLOR); if(src[17].empty()) return -1;
 
     /*src[0] = imread("set1/DSC_0256.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("set1/DSC_0257.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
@@ -153,7 +153,7 @@ int readImages(){
     src[9] = imread("set2/DSC_0181.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
     src[10] = imread("set2/DSC_0182.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;*/
 
-    src[0] = imread("set5/DSC_0035.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    /*src[0] = imread("set5/DSC_0035.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("set5/DSC_0036.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
     src[2] = imread("set5/DSC_0037.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
     src[3] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
@@ -169,7 +169,7 @@ int readImages(){
     src[13] = imread("set5/DSC_0031.jpg", CV_LOAD_IMAGE_COLOR); if(src[13].empty()) return -1;
     src[14] = imread("set5/DSC_0032.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
     src[15] = imread("set5/DSC_0033.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
-    src[16] = imread("set5/DSC_0034.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
+    src[16] = imread("set5/DSC_0034.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;*/
     /*src[0] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("set5/DSC_0039.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
     src[2] = imread("set5/DSC_0040.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
@@ -254,7 +254,7 @@ void collect_fp(){
         vector<Feature_Point> image_fp;
         for(int i = 2; i < I[z].rows-2 ; i++ ) {
             for(int j = 2; j < I[z].cols-2 ; j++ ) {
-                if( R[z].at<float>(i,j) > 1000000000000.0 ) {
+                if( R[z].at<float>(i,j) > 400000000000.0 ) {
                     if(R[z].at<float>(i,j) > R[z].at<float>(i-1,j-1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i,j-1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i+1,j-1) &&
@@ -349,7 +349,7 @@ void match_fp(){
 
         vector<int> point_b_min_dist(features[z+1].size() , 2147483647);
         for(int i=0; i < features[z].size(); i++){
-            if( matchingpoints[i].second <= max(2*min_dist, 70000)){
+            if( matchingpoints[i].second <= max(2*min_dist, 100000)){
                 if(matchingpoints[i].second < point_b_min_dist[matchingpoints[i].first]){
                     point_b_min_dist[matchingpoints[i].first] = matchingpoints[i].second;
                 }
@@ -357,7 +357,7 @@ void match_fp(){
         }
 
         for(int i=0; i < features[z].size(); i++){
-            if( matchingpoints[i].second <= max(2*min_dist, 70000)){
+            if( matchingpoints[i].second <= max(2*min_dist, 100000)){
                 if(matchingpoints[i].second > point_b_min_dist[matchingpoints[i].first]){
                     continue;
                 }
@@ -391,10 +391,10 @@ void match_fp(){
                  Point(good_matches[z][i].second.j,good_matches[z][i].second.i+window1.rows), Scalar(255,0,0),2);
         }
 
-        /*namedWindow( "matching img", CV_WINDOW_NORMAL );
+        namedWindow( "matching img", CV_WINDOW_NORMAL );
         imshow( "matching img", matching_img );
         waitKey(0);
-        destroyWindow("matching img");*/
+        destroyWindow("matching img");
     }
 }
 
@@ -441,13 +441,13 @@ void cylindrical(bool do_cylindrical){
             for(int i=0; i < good_matches[z].size(); i++){
                 int y = good_matches[z][i].first.i - (rows/2);
                 int x = good_matches[z][i].first.j - (cols/2);
-                good_matches[z][i].first.j = FOCAL_LENGTH * atan( x / FOCAL_LENGTH );
-                good_matches[z][i].first.i = FOCAL_LENGTH * y / sqrt( x*x + FOCAL_LENGTH*FOCAL_LENGTH );
+                good_matches[z][i].first.j = FOCAL_LENGTH * atan( x / FOCAL_LENGTH ) + cols/2;
+                good_matches[z][i].first.i = FOCAL_LENGTH * y / sqrt( x*x + FOCAL_LENGTH*FOCAL_LENGTH ) + rows/2;
 
                 y = good_matches[z][i].second.i - (rows/2);
                 x = good_matches[z][i].second.j - (cols/2);
-                good_matches[z][i].second.j = FOCAL_LENGTH * atan( x / FOCAL_LENGTH );
-                good_matches[z][i].second.i = FOCAL_LENGTH * y / sqrt( x*x + FOCAL_LENGTH*FOCAL_LENGTH );
+                good_matches[z][i].second.j = FOCAL_LENGTH * atan( x / FOCAL_LENGTH ) + cols/2;
+                good_matches[z][i].second.i = FOCAL_LENGTH * y / sqrt( x*x + FOCAL_LENGTH*FOCAL_LENGTH ) + rows/2;
 
             }
         }
@@ -465,27 +465,32 @@ void ransac(){
     for(int z=0; z < TOTAL_IMAGES-1; z++){
         int max_inliers = -1;
         Mat bestM;
-        for(int k=0; k < 35; k++){
+        for(int k=0; k < 500; k++){
             int match_size = good_matches[z].size();
             int a,b,c;
             a = rand() % match_size;
             do {b = rand() % match_size;} while (a == b);
             do {c = rand() % match_size;} while (a == c || b == c);
-            Mat M1(6, 4, CV_32F, Scalar(0));
-            Mat M2(6, 1, CV_32F, Scalar(0));
+            Mat M1(4, 4, CV_32F, Scalar(0.0));
+            //Mat M1(6, 4, CV_32F, Scalar(0.0));
+            Mat M2(4, 1, CV_32F, Scalar(0.0));
+            //Mat M2(6, 1, CV_32F, Scalar(0.0));
             M1.at<float>(0,0) = (float) good_matches[z][a].first.i;  M1.at<float>(0,1) = (float) good_matches[z][a].first.j;
             M1.at<float>(1,2) = (float) good_matches[z][a].first.i;  M1.at<float>(1,3) = (float) good_matches[z][a].first.j;
             M1.at<float>(2,0) = (float) good_matches[z][b].first.i;  M1.at<float>(2,1) = (float) good_matches[z][b].first.j;
             M1.at<float>(3,2) = (float) good_matches[z][b].first.i;  M1.at<float>(3,3) = (float) good_matches[z][b].first.j;
-            M1.at<float>(4,0) = (float) good_matches[z][c].first.i;  M1.at<float>(4,1) = (float) good_matches[z][c].first.j;
-            M1.at<float>(5,2) = (float) good_matches[z][c].first.i;  M1.at<float>(5,3) = (float) good_matches[z][c].first.j;
+            //M1.at<float>(4,0) = (float) good_matches[z][c].first.i;  M1.at<float>(4,1) = (float) good_matches[z][c].first.j;
+            //M1.at<float>(5,2) = (float) good_matches[z][c].first.i;  M1.at<float>(5,3) = (float) good_matches[z][c].first.j;
             M2.at<float>(0,0) = (float) good_matches[z][a].second.i;
             M2.at<float>(1,0) = (float) good_matches[z][a].second.j;
             M2.at<float>(2,0) = (float) good_matches[z][b].second.i;
             M2.at<float>(3,0) = (float) good_matches[z][b].second.j;
-            M2.at<float>(4,0) = (float) good_matches[z][c].second.i;
-            M2.at<float>(5,0) = (float) good_matches[z][c].second.j;
-            Mat dst(4, 1, CV_32F, Scalar(0));
+            //M2.at<float>(4,0) = (float) good_matches[z][c].second.i;
+            //M2.at<float>(5,0) = (float) good_matches[z][c].second.j;
+            Mat dst(4, 1, CV_32F, Scalar(0.0));
+
+            //printf("  (%f,%f)->(%f,%f)\n",M1.at<float>(0,0),M1.at<float>(0,1),M2.at<float>(0,0),M2.at<float>(1,0));
+            //printf("  (%f,%f)->(%f,%f)\n",M1.at<float>(2,0),M1.at<float>(2,1),M2.at<float>(2,0),M2.at<float>(3,0));
 
             solve(M1,M2,dst,DECOMP_SVD);
 
@@ -494,6 +499,9 @@ void ransac(){
             M.at<float>(0,1) = dst.at<float>(1,0);
             M.at<float>(1,0) = dst.at<float>(2,0);
             M.at<float>(1,1) = dst.at<float>(3,0);
+
+            //printf("  %f %f\n  %f %f\n",M.at<float>(0,0),M.at<float>(0,1),M.at<float>(1,0),M.at<float>(1,1));
+            //int q; cin >> q;
 
             // count inliers
             int inliers = 0;
@@ -506,10 +514,11 @@ void ransac(){
 
                 float d1 = m2.at<float>(0,0) - good_matches[z][i].second.i;
                 float d2 = m2.at<float>(1,0) - good_matches[z][i].second.j;
-                if(d1*d1+d2*d2 < 1000){
+                if(d1*d1+d2*d2 < 50){
                     inliers++;
                 }
             }
+
             if(inliers > max_inliers){
                 max_inliers = inliers;
                 bestM = M.clone();
@@ -517,6 +526,7 @@ void ransac(){
 
         }
         printf("max_inliers[%d]:%d\n",z,max_inliers);
+        printf("  %f %f\n  %f %f\n",bestM.at<float>(0,0),bestM.at<float>(0,1),bestM.at<float>(1,0),bestM.at<float>(1,1));
         transformation.push_back(bestM);
     }
 }
@@ -524,9 +534,10 @@ void ransac(){
 void align(){
     printf("alignment ...\n");
     Vec3b black(0,0,0);
-    Mat panorama(cyl[0].rows, cyl[0].cols * TOTAL_IMAGES/4, CV_8UC3, Scalar(0,0,0));
-    cyl[9].copyTo(panorama(Rect(cyl[0].cols,0,cyl[0].cols,cyl[0].rows)));
-    for(int z=8; z < TOTAL_IMAGES-1; z++){
+
+    for(int z=0; z < TOTAL_IMAGES-1; z++){
+        Mat panorama(cyl[0].rows, cyl[0].cols * 3, CV_8UC3, Scalar(0,0,0));
+        cyl[z+1].copyTo(panorama(Rect(cyl[z].cols,0,cyl[z].cols,cyl[z].rows)));
         float m11 = transformation[z].at<float>(0,0);
         float m12 = transformation[z].at<float>(0,1);
         float m21 = transformation[z].at<float>(1,0);
@@ -535,9 +546,9 @@ void align(){
         for(int i=0; i < cyl[z].rows; i++){
             for(int j=0; j < cyl[z].cols; j++){
                 if(cyl[z].at<Vec3b>(i,j) == black ){ continue; }
-                int new_i = i*m11 + j*m12;
-                int new_j = i*m21 + j*m22;
-                if(new_i > 0 && new_j > 0 && new_i < cyl[0].rows)
+                int new_i = (int) (i*m11 + j*m12);
+                int new_j = (int) (i*m21 + j*m22);
+                if(new_i > 0 && new_j > -cyl[z].cols && new_i < cyl[0].rows)
                     panorama.at<Vec3b>(new_i,new_j+cyl[z].cols) = cyl[z].at<Vec3b>(i,j);
             }
         }
