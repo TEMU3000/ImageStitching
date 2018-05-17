@@ -7,9 +7,9 @@
 #include <cmath>
 #include <ctime>
 
-#define TOTAL_IMAGES 18
+#define TOTAL_IMAGES 17
 #define SHRINK_RATIO 0.5
-#define FOCAL_LENGTH 704.5 //1145.87  //765.96
+#define FOCAL_LENGTH 1145.87  //765.96 //704.5(par)
 
 using namespace cv;
 using namespace std;
@@ -111,7 +111,7 @@ int readImages(){
     src[10] = imread("set4/DSC_0024.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;
     src[11] = imread("set4/DSC_0025.jpg", CV_LOAD_IMAGE_COLOR); if(src[11].empty()) return -1;*/
 
-    src[0] = imread("parrington/prtn17.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    /*src[0] = imread("parrington/prtn17.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("parrington/prtn16.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
     src[2] = imread("parrington/prtn15.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
     src[3] = imread("parrington/prtn14.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
@@ -128,7 +128,7 @@ int readImages(){
     src[14] = imread("parrington/prtn03.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
     src[15] = imread("parrington/prtn02.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
     src[16] = imread("parrington/prtn01.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
-    src[17] = imread("parrington/prtn00.jpg", CV_LOAD_IMAGE_COLOR); if(src[17].empty()) return -1;
+    src[17] = imread("parrington/prtn00.jpg", CV_LOAD_IMAGE_COLOR); if(src[17].empty()) return -1;*/
 
     /*src[0] = imread("set1/DSC_0256.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("set1/DSC_0257.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
@@ -170,7 +170,7 @@ int readImages(){
     src[14] = imread("set5/DSC_0032.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
     src[15] = imread("set5/DSC_0033.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
     src[16] = imread("set5/DSC_0034.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;*/
-    /*src[0] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    src[0] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("set5/DSC_0039.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
     src[2] = imread("set5/DSC_0040.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
     src[3] = imread("set5/DSC_0041.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
@@ -186,7 +186,7 @@ int readImages(){
     src[13] = imread("set5/DSC_0034.jpg", CV_LOAD_IMAGE_COLOR); if(src[13].empty()) return -1;
     src[14] = imread("set5/DSC_0035.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
     src[15] = imread("set5/DSC_0036.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
-    src[16] = imread("set5/DSC_0037.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;*/
+    src[16] = imread("set5/DSC_0037.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
 
     return 0;
 }
@@ -254,7 +254,7 @@ void collect_fp(){
         vector<Feature_Point> image_fp;
         for(int i = 2; i < I[z].rows-2 ; i++ ) {
             for(int j = 2; j < I[z].cols-2 ; j++ ) {
-                if( R[z].at<float>(i,j) > 400000000000.0 ) {
+                if( R[z].at<float>(i,j) > 700000000000.0 ) {
                     if(R[z].at<float>(i,j) > R[z].at<float>(i-1,j-1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i,j-1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i+1,j-1) &&
@@ -263,7 +263,6 @@ void collect_fp(){
                        R[z].at<float>(i,j) > R[z].at<float>(i-1,j+1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i,j+1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i+1,j+1) ){
-                        //circle( src[z], Point( j, i ), 5, Scalar(255,190,30), 2, 8, 0 );
 
                         Feature_Point fp;
                         fp.i = i;
@@ -301,13 +300,7 @@ void collect_fp(){
         }
 
         features[z] = image_fp;
-
-        /*char windowname[50];
-        sprintf(windowname, "img%d corner", z);
-        namedWindow( windowname, CV_WINDOW_NORMAL );
-        imshow( windowname, src[z] );*/
     }
-    //waitKey(0);
 }
 
 void match_fp(){
@@ -349,7 +342,7 @@ void match_fp(){
 
         vector<int> point_b_min_dist(features[z+1].size() , 2147483647);
         for(int i=0; i < features[z].size(); i++){
-            if( matchingpoints[i].second <= max(2*min_dist, 100000)){
+            if( matchingpoints[i].second <= max(2*min_dist, 50000)){
                 if(matchingpoints[i].second < point_b_min_dist[matchingpoints[i].first]){
                     point_b_min_dist[matchingpoints[i].first] = matchingpoints[i].second;
                 }
@@ -357,7 +350,7 @@ void match_fp(){
         }
 
         for(int i=0; i < features[z].size(); i++){
-            if( matchingpoints[i].second <= max(2*min_dist, 100000)){
+            if( matchingpoints[i].second <= max(2*min_dist, 50000)){
                 if(matchingpoints[i].second > point_b_min_dist[matchingpoints[i].first]){
                     continue;
                 }
@@ -368,6 +361,7 @@ void match_fp(){
             }
         }
 
+        /** show matched feature**/
         /*char windowname[10]; char windowname2[10];
         sprintf(windowname, "img%d", z);
         namedWindow( windowname, CV_WINDOW_NORMAL );
@@ -379,7 +373,8 @@ void match_fp(){
         destroyWindow(windowname);
         destroyWindow(windowname2);*/
 
-        Mat matching_img(window1.rows*2, window1.cols, window1.type() );
+        /** show feature matching line**/
+        /*Mat matching_img(window1.rows*2, window1.cols, window1.type() );
         Mat part;
         part = matching_img(Rect(0,0,window1.cols,window1.rows));
         window1.copyTo(part);
@@ -394,7 +389,7 @@ void match_fp(){
         namedWindow( "matching img", CV_WINDOW_NORMAL );
         imshow( "matching img", matching_img );
         waitKey(0);
-        destroyWindow("matching img");
+        destroyWindow("matching img");*/
     }
 }
 
@@ -437,7 +432,7 @@ void cylindrical(bool do_cylindrical){
         cyl.push_back(m_cyl);
 
         if(z < TOTAL_IMAGES-1){
-            // project matching feature points
+            /** project the matching feature points to cylinder**/
             for(int i=0; i < good_matches[z].size(); i++){
                 int y = good_matches[z][i].first.i - (rows/2);
                 int x = good_matches[z][i].first.j - (cols/2);
@@ -452,6 +447,7 @@ void cylindrical(bool do_cylindrical){
             }
         }
 
+        /** show cylindrical projected image**/
         /*char windowname[10];
         sprintf(windowname, "cyl%d", z);
         namedWindow( windowname, CV_WINDOW_FULLSCREEN );
@@ -464,53 +460,80 @@ void ransac(){
     printf("ransac ...\n");
     for(int z=0; z < TOTAL_IMAGES-1; z++){
         int max_inliers = -1;
-        Mat bestM;
-        for(int k=0; k < 500; k++){
+        Mat bestModel;
+        for(int k=0; k < 72; k++){
             int match_size = good_matches[z].size();
-            int a,b,c;
+            int a,b,c,d;
             a = rand() % match_size;
             do {b = rand() % match_size;} while (a == b);
             do {c = rand() % match_size;} while (a == c || b == c);
-            Mat M1(4, 4, CV_32F, Scalar(0.0));
-            //Mat M1(6, 4, CV_32F, Scalar(0.0));
-            Mat M2(4, 1, CV_32F, Scalar(0.0));
-            //Mat M2(6, 1, CV_32F, Scalar(0.0));
-            M1.at<float>(0,0) = (float) good_matches[z][a].first.i;  M1.at<float>(0,1) = (float) good_matches[z][a].first.j;
-            M1.at<float>(1,2) = (float) good_matches[z][a].first.i;  M1.at<float>(1,3) = (float) good_matches[z][a].first.j;
-            M1.at<float>(2,0) = (float) good_matches[z][b].first.i;  M1.at<float>(2,1) = (float) good_matches[z][b].first.j;
-            M1.at<float>(3,2) = (float) good_matches[z][b].first.i;  M1.at<float>(3,3) = (float) good_matches[z][b].first.j;
-            //M1.at<float>(4,0) = (float) good_matches[z][c].first.i;  M1.at<float>(4,1) = (float) good_matches[z][c].first.j;
-            //M1.at<float>(5,2) = (float) good_matches[z][c].first.i;  M1.at<float>(5,3) = (float) good_matches[z][c].first.j;
-            M2.at<float>(0,0) = (float) good_matches[z][a].second.i;
-            M2.at<float>(1,0) = (float) good_matches[z][a].second.j;
-            M2.at<float>(2,0) = (float) good_matches[z][b].second.i;
-            M2.at<float>(3,0) = (float) good_matches[z][b].second.j;
-            //M2.at<float>(4,0) = (float) good_matches[z][c].second.i;
-            //M2.at<float>(5,0) = (float) good_matches[z][c].second.j;
-            Mat dst(4, 1, CV_32F, Scalar(0.0));
+            do {d = rand() % match_size;} while (a == d || b == d || c == d);
 
-            //printf("  (%f,%f)->(%f,%f)\n",M1.at<float>(0,0),M1.at<float>(0,1),M2.at<float>(0,0),M2.at<float>(1,0));
-            //printf("  (%f,%f)->(%f,%f)\n",M1.at<float>(2,0),M1.at<float>(2,1),M2.at<float>(2,0),M2.at<float>(3,0));
+            /** sfm::normalizePoints not available on Windows**/
+            /*vector<Point> uv;
+            uv.push_back(Point(good_matches[z][a].first.i,good_matches[z][a].first.j));
+            vector<Point> norm_uv;
+            Mat T;
+            sfm::normalizePoints(uv,norm_uv,T);
+            //Mat T';
+            //sfm::normalizePoints(u'v',norm_u_v_,T');
 
-            solve(M1,M2,dst,DECOMP_SVD);
+            Mat A(8, 9, CV_32F, Scalar(0.0));
+            int u[] = {norm_uv[0].x,norm_uv[1].x,norm_uv[2].x,norm_uv[3].x};
+            int v[] = {norm_uv[0].y,norm_uv[1].y,norm_uv[2].y,norm_uv[3].y};
+            int u_new[] = {norm_u_v_[0].x,norm_u_v_[1].x,norm_u_v_[2].x,norm_u_v_[3].x};
+            int v_new[] = {norm_u_v_[0].y,norm_u_v_[1].y,norm_u_v_[2].y,norm_u_v_[3].y};
 
-            Mat M(2, 2, CV_32F, Scalar(0));
-            M.at<float>(0,0) = dst.at<float>(0,0);
-            M.at<float>(0,1) = dst.at<float>(1,0);
-            M.at<float>(1,0) = dst.at<float>(2,0);
-            M.at<float>(1,1) = dst.at<float>(3,0);
+            for(int i=0; i < 4; i++){
+                A.at<float>(i*2,3) = -u[i];    A.at<float>(i*2,4) = -v[i];    A.at<float>(i*2,5) = -1;
+                A.at<float>(i*2,6) = v_new[i]*u[i];
+                A.at<float>(i*2,7) = v_new[i]*v[i];
+                A.at<float>(i*2,8) = v_new[i];
+                A.at<float>(i*2+1,0) = u[i];    A.at<float>(i*2+1,1) = v[i];    A.at<float>(i*2+1,2) = 1;
+                A.at<float>(i*2+1,6) = -u_new[i]*u[i];
+                A.at<float>(i*2+1,7) = -u_new[i]*v[i];
+                A.at<float>(i*2+1,8) = -u_new[i];
+            }
 
-            //printf("  %f %f\n  %f %f\n",M.at<float>(0,0),M.at<float>(0,1),M.at<float>(1,0),M.at<float>(1,1));
-            //int q; cin >> q;
+            Mat h;
 
-            // count inliers
+            SVD::solveZ(A,h);
+
+            // h = (T')^(-1) * h * T;
+
+            Mat H(3, 3, CV_32F, Scalar(0));
+            H.at<float>(0,0) = h.at<float>(0,0);  H.at<float>(0,1) = h.at<float>(1,0);  H.at<float>(0,2) = h.at<float>(2,0);
+            H.at<float>(1,0) = h.at<float>(3,0);  H.at<float>(1,1) = h.at<float>(4,0);  H.at<float>(1,2) = h.at<float>(5,0);
+            H.at<float>(2,0) = h.at<float>(6,0);  H.at<float>(2,1) = h.at<float>(7,0);  H.at<float>(2,2) = h.at<float>(8,0);
+            */
+
+            /** give up finding homography of four points by implementing normalized DLT**/
+            vector<Point> uv;
+            uv.push_back(Point(good_matches[z][a].first.i,good_matches[z][a].first.j));
+            uv.push_back(Point(good_matches[z][b].first.i,good_matches[z][b].first.j));
+            uv.push_back(Point(good_matches[z][c].first.i,good_matches[z][c].first.j));
+            uv.push_back(Point(good_matches[z][d].first.i,good_matches[z][d].first.j));
+            vector<Point> u_v_;
+            u_v_.push_back(Point(good_matches[z][a].second.i,good_matches[z][a].second.j));
+            u_v_.push_back(Point(good_matches[z][b].second.i,good_matches[z][b].second.j));
+            u_v_.push_back(Point(good_matches[z][c].second.i,good_matches[z][c].second.j));
+            u_v_.push_back(Point(good_matches[z][d].second.i,good_matches[z][d].second.j));
+            Mat model = estimateRigidTransform(uv,u_v_,true);
+            if(model.empty()){
+                continue;
+            }
+
+            model.convertTo(model, CV_32F);
+
+            /** count inliers **/
             int inliers = 0;
             for(int i=0; i < match_size; i++){
-                Mat m1(2, 1, CV_32F, Scalar(0));
+                Mat m1(3, 1, CV_32F, Scalar(0));
                 m1.at<float>(0,0) = (float) good_matches[z][i].first.i;
                 m1.at<float>(1,0) = (float) good_matches[z][i].first.j;
+                m1.at<float>(2,0) = 1.0;
                 Mat m2(2, 1, CV_32F, Scalar(0));
-                m2 = M * m1;
+                m2 = model * m1;
 
                 float d1 = m2.at<float>(0,0) - good_matches[z][i].second.i;
                 float d2 = m2.at<float>(1,0) - good_matches[z][i].second.j;
@@ -521,13 +544,15 @@ void ransac(){
 
             if(inliers > max_inliers){
                 max_inliers = inliers;
-                bestM = M.clone();
+                bestModel = model.clone();
             }
 
         }
         printf("max_inliers[%d]:%d\n",z,max_inliers);
-        printf("  %f %f\n  %f %f\n",bestM.at<float>(0,0),bestM.at<float>(0,1),bestM.at<float>(1,0),bestM.at<float>(1,1));
-        transformation.push_back(bestM);
+        printf("  %f %f %f\n  %f %f %f\n",
+               bestModel.at<float>(0,0),bestModel.at<float>(0,1),bestModel.at<float>(0,2),
+               bestModel.at<float>(1,0),bestModel.at<float>(1,1),bestModel.at<float>(1,2));
+        transformation.push_back(bestModel);
     }
 }
 
@@ -535,26 +560,32 @@ void align(){
     printf("alignment ...\n");
     Vec3b black(0,0,0);
 
+    //Mat panorama(cyl[0].rows*2, cyl[0].cols * TOTAL_IMAGES * 2/3, CV_8UC3, Scalar(0,0,0));
+    Mat stitched;
     for(int z=0; z < TOTAL_IMAGES-1; z++){
-        Mat panorama(cyl[0].rows, cyl[0].cols * 3, CV_8UC3, Scalar(0,0,0));
-        cyl[z+1].copyTo(panorama(Rect(cyl[z].cols,0,cyl[z].cols,cyl[z].rows)));
-        float m11 = transformation[z].at<float>(0,0);
-        float m12 = transformation[z].at<float>(0,1);
-        float m21 = transformation[z].at<float>(1,0);
-        float m22 = transformation[z].at<float>(1,1);
+        Mat stitching(cyl[z].rows*2, cyl[z].cols * (z/2+2), CV_8UC3, Scalar(0,0,0));
+        cyl[z+1].copyTo(stitching(Rect(cyl[z].cols * (z/2+1),cyl[z].rows/2,cyl[z].cols,cyl[z].rows)));
 
         for(int i=0; i < cyl[z].rows; i++){
             for(int j=0; j < cyl[z].cols; j++){
                 if(cyl[z].at<Vec3b>(i,j) == black ){ continue; }
-                int new_i = (int) (i*m11 + j*m12);
-                int new_j = (int) (i*m21 + j*m22);
-                if(new_i > 0 && new_j > -cyl[z].cols && new_i < cyl[0].rows)
-                    panorama.at<Vec3b>(new_i,new_j+cyl[z].cols) = cyl[z].at<Vec3b>(i,j);
+                Mat m1(3, 1, CV_32F, Scalar(0));
+                m1.at<float>(0,0) = (float) i;
+                m1.at<float>(1,0) = (float) j;
+                m1.at<float>(2,0) = 1.0;
+                Mat m2(2, 1, CV_32F, Scalar(0));
+                m2 = transformation[z] * m1;
+                int new_i = (int) (m2.at<float>(0,0)) + cyl[z].rows/2;
+                int new_j = (int) (m2.at<float>(1,0)) + cyl[z].cols * (z/2+1);
+                if(new_i > 0 && new_i < cyl[0].rows*2){
+                    stitching.at<Vec3b>(new_i, new_j) = cyl[z].at<Vec3b>(i,j);
+                }
             }
         }
 
         namedWindow( "panorama", CV_WINDOW_NORMAL );
-        imshow( "panorama", panorama );
+        imshow( "panorama", stitching );
         waitKey(0);
     }
+
 }
