@@ -9,7 +9,7 @@
 
 #define TOTAL_IMAGES 17
 #define SHRINK_RATIO 0.5
-#define FOCAL_LENGTH 1145.87  //765.96 //704.5(par)
+#define FOCAL_LENGTH 1145.87  //572.935  //704.5(parrington)
 
 using namespace cv;
 using namespace std;
@@ -35,9 +35,6 @@ vector<vector<Feature_Point>> features(TOTAL_IMAGES);
 vector<vector<pair<Feature_Point,Feature_Point>>> good_matches(TOTAL_IMAGES);
 vector<Mat> cyl;
 vector<Mat> transformation;
-double f[] = {580.601, 579.297, 580.766, 579.218, 577.435, 577.44,
-                    578.606, 580.336, 580.681, 585.638, 587.866, 584.383,
-                    583.408, 581.838, 579.621, 578.245, 579.491};
 
 int readImages();
 void shrinkImages(const double m);
@@ -70,29 +67,15 @@ int main(int argc, char *argv[])
 
     collect_fp();
 
-    // OPENCV cornerHarris
-    /*Mat dst, dst_norm;
-    cornerHarris( I[0], dst, 2, 3, 0.04, BORDER_DEFAULT );
-    normalize( dst, dst_norm, 0, 255, NORM_MINMAX, CV_32FC1, Mat() );
-    for(int i = 0; i < I[0].rows ; i++ ) {
-        for(int j = 0; j < I[0].cols; j++ ) {
-            if( (int) dst_norm.at<float>(i,j) > 90 ) {
-                circle( src[0], Point( j, i ), 3, Scalar(0,255,255), 1, 8, 0 );
-            }
-        }
-    }
-    namedWindow( "OPENCV Corner", CV_WINDOW_AUTOSIZE );
-    imshow( "OPENCV Corner", src[0] );*/
-
     match_fp();
 
     cylindrical(true);
+
     srand (time(NULL));
     ransac();
 
     align();
 
-    waitKey(0);
     return 0;
 }
 
@@ -246,6 +229,14 @@ void computeR(const double k){
         R.push_back(r);
         //normalize( R[i], R[i], 0, 255, NORM_MINMAX, CV_32FC1, Mat() );
     }
+    vector<Mat>().swap(Ix);
+    vector<Mat>().swap(Iy);
+    vector<Mat>().swap(IxSq);
+    vector<Mat>().swap(IySq);
+    vector<Mat>().swap(Ixy);
+    vector<Mat>().swap(SxSq);
+    vector<Mat>().swap(SySq);
+    vector<Mat>().swap(Sxy);
 }
 
 void collect_fp(){
@@ -254,7 +245,7 @@ void collect_fp(){
         vector<Feature_Point> image_fp;
         for(int i = 2; i < I[z].rows-2 ; i++ ) {
             for(int j = 2; j < I[z].cols-2 ; j++ ) {
-                if( R[z].at<float>(i,j) > 700000000000.0 ) {
+                if( R[z].at<float>(i,j) > 800000000000.0 ) {
                     if(R[z].at<float>(i,j) > R[z].at<float>(i-1,j-1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i,j-1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i+1,j-1) &&
@@ -342,7 +333,7 @@ void match_fp(){
 
         vector<int> point_b_min_dist(features[z+1].size() , 2147483647);
         for(int i=0; i < features[z].size(); i++){
-            if( matchingpoints[i].second <= max(2*min_dist, 50000)){
+            if( matchingpoints[i].second <= max(2*min_dist, 60000)){
                 if(matchingpoints[i].second < point_b_min_dist[matchingpoints[i].first]){
                     point_b_min_dist[matchingpoints[i].first] = matchingpoints[i].second;
                 }
@@ -350,7 +341,7 @@ void match_fp(){
         }
 
         for(int i=0; i < features[z].size(); i++){
-            if( matchingpoints[i].second <= max(2*min_dist, 50000)){
+            if( matchingpoints[i].second <= max(2*min_dist, 60000)){
                 if(matchingpoints[i].second > point_b_min_dist[matchingpoints[i].first]){
                     continue;
                 }
@@ -518,7 +509,7 @@ void ransac(){
             u_v_.push_back(Point(good_matches[z][b].second.i,good_matches[z][b].second.j));
             u_v_.push_back(Point(good_matches[z][c].second.i,good_matches[z][c].second.j));
             u_v_.push_back(Point(good_matches[z][d].second.i,good_matches[z][d].second.j));
-            Mat model = estimateRigidTransform(uv,u_v_,true);
+            Mat model = estimateRigidTransform(u_v_,uv,true);
             if(model.empty()){
                 continue;
             }
@@ -529,14 +520,14 @@ void ransac(){
             int inliers = 0;
             for(int i=0; i < match_size; i++){
                 Mat m1(3, 1, CV_32F, Scalar(0));
-                m1.at<float>(0,0) = (float) good_matches[z][i].first.i;
-                m1.at<float>(1,0) = (float) good_matches[z][i].first.j;
+                m1.at<float>(0,0) = (float) good_matches[z][i].second.i;
+                m1.at<float>(1,0) = (float) good_matches[z][i].second.j;
                 m1.at<float>(2,0) = 1.0;
                 Mat m2(2, 1, CV_32F, Scalar(0));
                 m2 = model * m1;
 
-                float d1 = m2.at<float>(0,0) - good_matches[z][i].second.i;
-                float d2 = m2.at<float>(1,0) - good_matches[z][i].second.j;
+                float d1 = m2.at<float>(0,0) - good_matches[z][i].first.i;
+                float d2 = m2.at<float>(1,0) - good_matches[z][i].first.j;
                 if(d1*d1+d2*d2 < 50){
                     inliers++;
                 }
@@ -560,32 +551,116 @@ void align(){
     printf("alignment ...\n");
     Vec3b black(0,0,0);
 
-    //Mat panorama(cyl[0].rows*2, cyl[0].cols * TOTAL_IMAGES * 2/3, CV_8UC3, Scalar(0,0,0));
-    Mat stitched;
-    for(int z=0; z < TOTAL_IMAGES-1; z++){
-        Mat stitching(cyl[z].rows*2, cyl[z].cols * (z/2+2), CV_8UC3, Scalar(0,0,0));
-        cyl[z+1].copyTo(stitching(Rect(cyl[z].cols * (z/2+1),cyl[z].rows/2,cyl[z].cols,cyl[z].rows)));
+    Mat stitched(cyl[TOTAL_IMAGES-1].rows*2, cyl[TOTAL_IMAGES-1].cols, CV_8UC3, Scalar(0,0,0));
+    cyl[TOTAL_IMAGES-1].copyTo(stitched(Rect(0,cyl[TOTAL_IMAGES-1].rows/2,cyl[TOTAL_IMAGES-1].cols,cyl[TOTAL_IMAGES-1].rows)));
 
-        for(int i=0; i < cyl[z].rows; i++){
-            for(int j=0; j < cyl[z].cols; j++){
-                if(cyl[z].at<Vec3b>(i,j) == black ){ continue; }
+    for(int z=TOTAL_IMAGES-1; z > 0; z--){
+        printf("  image %d ...\n",z);
+        Mat stitching_base(cyl[z-1].rows*2, cyl[z-1].cols * ((TOTAL_IMAGES-1-z)/2+2), CV_8UC3, Scalar(0,0,0));
+
+        cyl[z-1].copyTo(stitching_base(Rect(0,cyl[z-1].rows/2,cyl[z-1].cols,cyl[z-1].rows)));
+
+        for(int i=0; i < stitched.rows; i++){
+            for(int j=0; j < stitched.cols; j++){
+                if(stitched.at<Vec3b>(i,j) == black ){ continue; }
+
                 Mat m1(3, 1, CV_32F, Scalar(0));
-                m1.at<float>(0,0) = (float) i;
+                m1.at<float>(0,0) = (float) i - cyl[z-1].rows/2;
                 m1.at<float>(1,0) = (float) j;
                 m1.at<float>(2,0) = 1.0;
-                Mat m2(2, 1, CV_32F, Scalar(0));
-                m2 = transformation[z] * m1;
-                int new_i = (int) (m2.at<float>(0,0)) + cyl[z].rows/2;
-                int new_j = (int) (m2.at<float>(1,0)) + cyl[z].cols * (z/2+1);
-                if(new_i > 0 && new_i < cyl[0].rows*2){
-                    stitching.at<Vec3b>(new_i, new_j) = cyl[z].at<Vec3b>(i,j);
+                Mat m2(3, 1, CV_32F, Scalar(0));
+
+                m2 = transformation[z-1] * m1;
+
+                int new_i = (int) (m2.at<float>(0,0)) + cyl[z-1].rows/2;
+                int new_j = (int) (m2.at<float>(1,0));
+                if(new_i > 1 && new_i < cyl[z-1].rows*2-1){
+                    if(new_i >= cyl[z-1].rows/2 && new_i < cyl[z-1].rows*3/2 && new_j < cyl[z-1].cols && stitching_base.at<Vec3b>(new_i, new_j) != black){
+                        /** overlapping, blend pixels **/
+                        double alpha, beta;
+                        alpha = (double)(new_j-cyl[z-1].cols/2) / (double)(cyl[z-1].cols/2);
+                        alpha = alpha < 0.0 ? 0.0 : alpha;
+                        beta = 1.0 - alpha;
+                        addWeighted( stitched.at<Vec3b>(i,j), alpha, stitching_base.at<Vec3b>(new_i, new_j), beta, 0.0, stitching_base.at<Vec3b>(new_i, new_j));
+                    } else {
+                        //stitching_base.at<Vec3b>(new_i-1, new_j) = stitched.at<Vec3b>(i,j);
+                        //stitching_base.at<Vec3b>(new_i, new_j-1) = stitched.at<Vec3b>(i,j);
+                        stitching_base.at<Vec3b>(new_i, new_j) = stitched.at<Vec3b>(i,j);
+                        stitching_base.at<Vec3b>(new_i+1, new_j) = stitched.at<Vec3b>(i,j);
+                        stitching_base.at<Vec3b>(new_i, new_j+1) = stitched.at<Vec3b>(i,j);
+                    }
                 }
             }
         }
 
-        namedWindow( "panorama", CV_WINDOW_NORMAL );
-        imshow( "panorama", stitching );
-        waitKey(0);
-    }
+        for(int i=1; i < stitching_base.rows-1; i++){
+            for(int j=1; j < stitching_base.cols-1; j++){
+                if(stitching_base.at<Vec3b>(i,j) == black){
+                    int color_count = 0;
+                    if(stitching_base.at<Vec3b>(i-1,j) != black){
+                        color_count++;
+                    }
+                    if(stitching_base.at<Vec3b>(i,j-1) != black){
+                        color_count++;
+                    }
+                    if(stitching_base.at<Vec3b>(i+1,j) != black){
+                        color_count++;
+                    }
+                    if(stitching_base.at<Vec3b>(i,j+1) != black){
+                        color_count++;
+                    }
+                    if(color_count >= 3){
+                        stitching_base.at<Vec3b>(i,j) = stitching_base.at<Vec3b>(i-1,j) != black ?
+                                                        stitching_base.at<Vec3b>(i-1,j) :
+                                                        stitching_base.at<Vec3b>(i,j-1);
+                    }
+                }
+            }
+        }
 
+        stitched = stitching_base.clone();
+
+        /** show stitched so far **/
+        /*namedWindow( "panorama", CV_WINDOW_NORMAL );
+        imshow( "panorama", stitched );
+        waitKey(0);*/
+    }
+    int top_bound = 0;
+    for(int i=0; i < stitched.rows; i++){
+        for(int j=0; j < stitched.cols; j++){
+            if(stitched.at<Vec3b>(i,j) != black){
+                top_bound = i;
+                break;
+            }
+        }
+        if(top_bound != 0){
+            break;
+        }
+    }
+    int bottom_bound = stitched.rows-1;
+    for(int i=stitched.rows-1; i >= 0; i--){
+        for(int j=0; j < stitched.cols; j++){
+            if(stitched.at<Vec3b>(i,j) != black){
+                bottom_bound = i;
+                break;
+            }
+        }
+        if(bottom_bound != stitched.rows-1){
+            break;
+        }
+    }
+    int right_bound = stitched.cols-1;
+    for(int j=stitched.cols-1; j >= 0; j--){
+        for(int i=0; i < stitched.rows; i++){
+            if(stitched.at<Vec3b>(i,j) != black){
+                right_bound = j;
+                break;
+            }
+        }
+        if(right_bound != stitched.cols-1){
+            break;
+        }
+    }
+    stitched = stitched(Rect(0,top_bound,right_bound,bottom_bound-top_bound));
+    imwrite("panorama_cropped.jpg",stitched);
 }

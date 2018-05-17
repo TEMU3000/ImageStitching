@@ -1,0 +1,1 @@
+run ImageStitching.exe with image directory set5/
