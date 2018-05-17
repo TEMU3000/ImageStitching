@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <cmath>
+#include <ctime>
 
 #define TOTAL_IMAGES 17
 #define SHRINK_RATIO 0.5
@@ -16,7 +17,7 @@ using namespace std;
 typedef struct feature_point{
     int i;
     int j;
-    vector<uint8_t> descriptor;
+    vector<Vec3b> descriptor;
 } Feature_Point;
 
 vector<Mat> src(TOTAL_IMAGES);
@@ -33,6 +34,7 @@ vector<Mat> R;
 vector<vector<Feature_Point>> features(TOTAL_IMAGES);
 vector<vector<pair<Feature_Point,Feature_Point>>> good_matches(TOTAL_IMAGES);
 vector<Mat> cyl;
+vector<Mat> transformation;
 double f[] = {580.601, 579.297, 580.766, 579.218, 577.435, 577.44,
                     578.606, 580.336, 580.681, 585.638, 587.866, 584.383,
                     583.408, 581.838, 579.621, 578.245, 579.491};
@@ -47,7 +49,9 @@ void computeR(const double k);
 void collect_fp();
 void match_fp();
 int calc_dist(const Feature_Point *a, const Feature_Point *b);
-void cylindrical();
+void cylindrical(bool do_cylindrical);
+void ransac();
+void align();
 
 int main(int argc, char *argv[])
 {
@@ -82,7 +86,11 @@ int main(int argc, char *argv[])
 
     match_fp();
 
-    cylindrical();
+    cylindrical(false);
+    srand (time(NULL));
+    ransac();
+
+    align();
 
     waitKey(0);
     return 0;
@@ -145,7 +153,7 @@ int readImages(){
     src[9] = imread("set2/DSC_0181.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
     src[10] = imread("set2/DSC_0182.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;*/
 
-    /*src[0] = imread("set5/DSC_0035.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    src[0] = imread("set5/DSC_0035.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("set5/DSC_0036.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
     src[2] = imread("set5/DSC_0037.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
     src[3] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
@@ -161,8 +169,8 @@ int readImages(){
     src[13] = imread("set5/DSC_0031.jpg", CV_LOAD_IMAGE_COLOR); if(src[13].empty()) return -1;
     src[14] = imread("set5/DSC_0032.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
     src[15] = imread("set5/DSC_0033.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
-    src[16] = imread("set5/DSC_0034.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;*/
-    src[0] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
+    src[16] = imread("set5/DSC_0034.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
+    /*src[0] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("set5/DSC_0039.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
     src[2] = imread("set5/DSC_0040.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
     src[3] = imread("set5/DSC_0041.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
@@ -178,7 +186,7 @@ int readImages(){
     src[13] = imread("set5/DSC_0034.jpg", CV_LOAD_IMAGE_COLOR); if(src[13].empty()) return -1;
     src[14] = imread("set5/DSC_0035.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
     src[15] = imread("set5/DSC_0036.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
-    src[16] = imread("set5/DSC_0037.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
+    src[16] = imread("set5/DSC_0037.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;*/
 
     return 0;
 }
@@ -187,7 +195,6 @@ void shrinkImages(const double m){
     printf("Resizing images to %fx ...\n", m);
     for(int i=0; i < TOTAL_IMAGES; i++){
         resize(src[i], src[i], Size((src[i]).cols * m, (src[i]).rows * m),0,0,INTER_LINEAR);
-        f[i] *= SHRINK_RATIO;
     }
 }
 
@@ -245,8 +252,8 @@ void collect_fp(){
     printf("collect feature points ...\n");
     for(int z=0; z < TOTAL_IMAGES; z++){
         vector<Feature_Point> image_fp;
-        for(int i = 1; i < I[z].rows-1 ; i++ ) {
-            for(int j = 1; j < I[z].cols-1 ; j++ ) {
+        for(int i = 2; i < I[z].rows-2 ; i++ ) {
+            for(int j = 2; j < I[z].cols-2 ; j++ ) {
                 if( R[z].at<float>(i,j) > 1000000000000.0 ) {
                     if(R[z].at<float>(i,j) > R[z].at<float>(i-1,j-1) &&
                        R[z].at<float>(i,j) > R[z].at<float>(i,j-1) &&
@@ -261,31 +268,31 @@ void collect_fp(){
                         Feature_Point fp;
                         fp.i = i;
                         fp.j = j;
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-2,j-2));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-2,j-1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-2,j));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-2,j+1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-2,j+2));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-1,j-2));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-1,j-1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-1,j));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-1,j+1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i-1,j+2));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i,j-2));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i,j-1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i,j));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i,j+1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i,j+2));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+1,j-2));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+1,j-1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+1,j));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+1,j+1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+1,j+2));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+2,j-2));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+2,j-1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+2,j));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+2,j+1));
-                        fp.descriptor.push_back(I[z].at<uint8_t>(i+2,j+2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-2,j-2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-2,j-1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-2,j));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-2,j+1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-2,j+2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-1,j-2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-1,j-1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-1,j));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-1,j+1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i-1,j+2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i,j-2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i,j-1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i,j));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i,j+1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i,j+2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+1,j-2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+1,j-1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+1,j));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+1,j+1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+1,j+2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+2,j-2));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+2,j-1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+2,j));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+2,j+1));
+                        fp.descriptor.push_back(src[z].at<Vec3b>(i+2,j+2));
 
                         image_fp.push_back(fp);
                     }
@@ -325,6 +332,9 @@ void match_fp(){
             int dist = 2147483647;
             int point_b = -1;
             for(int j=0; j < features[z+1].size(); j++){
+                if(features[z+1][j].j > src[z+1].cols*2/3 || features[z+1][j].j > features[z][i].j){
+                    continue;
+                }
                 int d = calc_dist(&features[z][i], &features[z+1][j]);
                 if(d < dist){
                     dist = d;
@@ -333,12 +343,13 @@ void match_fp(){
             }
             if( dist < min_dist ) min_dist = dist;
             matchingpoints.push_back(make_pair(point_b, dist));
+
         }
         printf("min_dist: %d\n", min_dist);
 
         vector<int> point_b_min_dist(features[z+1].size() , 2147483647);
         for(int i=0; i < features[z].size(); i++){
-            if( matchingpoints[i].second <= max(3*min_dist, 10000)){
+            if( matchingpoints[i].second <= max(2*min_dist, 70000)){
                 if(matchingpoints[i].second < point_b_min_dist[matchingpoints[i].first]){
                     point_b_min_dist[matchingpoints[i].first] = matchingpoints[i].second;
                 }
@@ -346,10 +357,11 @@ void match_fp(){
         }
 
         for(int i=0; i < features[z].size(); i++){
-            if( matchingpoints[i].second <= max(3*min_dist, 10000)){
+            if( matchingpoints[i].second <= max(2*min_dist, 70000)){
                 if(matchingpoints[i].second > point_b_min_dist[matchingpoints[i].first]){
                     continue;
                 }
+                if(features[z][i].j < src[z].cols*1/3){ continue; }
                 good_matches[z].push_back(make_pair(features[z][i], features[z+1][matchingpoints[i].first]));
                 circle( window1, Point( features[z][i].j, features[z][i].i ), 5, Scalar(20,20,255), 2, 8, 0 );
                 circle( window2, Point( features[z+1][matchingpoints[i].first].j, features[z+1][matchingpoints[i].first].i ), 5, Scalar(20,20,255), 2, 8, 0 );
@@ -379,24 +391,34 @@ void match_fp(){
                  Point(good_matches[z][i].second.j,good_matches[z][i].second.i+window1.rows), Scalar(255,0,0),2);
         }
 
-        namedWindow( "matching img", CV_WINDOW_NORMAL );
+        /*namedWindow( "matching img", CV_WINDOW_NORMAL );
         imshow( "matching img", matching_img );
         waitKey(0);
-        destroyWindow("matching img");
+        destroyWindow("matching img");*/
     }
 }
 
 int calc_dist(const Feature_Point *a, const Feature_Point *b){
     int d = 0;
     for(int i=0; i < 25; i++){
-        int tmp = (a -> descriptor[i]) - (b -> descriptor[i]);
+        int tmp = (a -> descriptor[i])[0] - (b -> descriptor[i])[0];
+        d += tmp * tmp;
+        tmp = (a -> descriptor[i])[1] - (b -> descriptor[i])[1];
+        d += tmp * tmp;
+        tmp = (a -> descriptor[i])[2] - (b -> descriptor[i])[2];
         d += tmp * tmp;
     }
     return d;
 }
 
-void cylindrical(){
+void cylindrical(bool do_cylindrical){
     printf("cylindrical projection ...\n");
+    if(!do_cylindrical){
+        for(int z=0; z < TOTAL_IMAGES; z++){
+            cyl.push_back(src[z]);
+        }
+        return;
+    }
 
     for(int z=0; z < TOTAL_IMAGES; z++){
         int rows = src[z].rows;
@@ -435,5 +457,93 @@ void cylindrical(){
         namedWindow( windowname, CV_WINDOW_FULLSCREEN );
         imshow( windowname, m_cyl );
         waitKey(0);*/
+    }
+}
+
+void ransac(){
+    printf("ransac ...\n");
+    for(int z=0; z < TOTAL_IMAGES-1; z++){
+        int max_inliers = -1;
+        Mat bestM;
+        for(int k=0; k < 35; k++){
+            int match_size = good_matches[z].size();
+            int a,b,c;
+            a = rand() % match_size;
+            do {b = rand() % match_size;} while (a == b);
+            do {c = rand() % match_size;} while (a == c || b == c);
+            Mat M1(6, 4, CV_32F, Scalar(0));
+            Mat M2(6, 1, CV_32F, Scalar(0));
+            M1.at<float>(0,0) = (float) good_matches[z][a].first.i;  M1.at<float>(0,1) = (float) good_matches[z][a].first.j;
+            M1.at<float>(1,2) = (float) good_matches[z][a].first.i;  M1.at<float>(1,3) = (float) good_matches[z][a].first.j;
+            M1.at<float>(2,0) = (float) good_matches[z][b].first.i;  M1.at<float>(2,1) = (float) good_matches[z][b].first.j;
+            M1.at<float>(3,2) = (float) good_matches[z][b].first.i;  M1.at<float>(3,3) = (float) good_matches[z][b].first.j;
+            M1.at<float>(4,0) = (float) good_matches[z][c].first.i;  M1.at<float>(4,1) = (float) good_matches[z][c].first.j;
+            M1.at<float>(5,2) = (float) good_matches[z][c].first.i;  M1.at<float>(5,3) = (float) good_matches[z][c].first.j;
+            M2.at<float>(0,0) = (float) good_matches[z][a].second.i;
+            M2.at<float>(1,0) = (float) good_matches[z][a].second.j;
+            M2.at<float>(2,0) = (float) good_matches[z][b].second.i;
+            M2.at<float>(3,0) = (float) good_matches[z][b].second.j;
+            M2.at<float>(4,0) = (float) good_matches[z][c].second.i;
+            M2.at<float>(5,0) = (float) good_matches[z][c].second.j;
+            Mat dst(4, 1, CV_32F, Scalar(0));
+
+            solve(M1,M2,dst,DECOMP_SVD);
+
+            Mat M(2, 2, CV_32F, Scalar(0));
+            M.at<float>(0,0) = dst.at<float>(0,0);
+            M.at<float>(0,1) = dst.at<float>(1,0);
+            M.at<float>(1,0) = dst.at<float>(2,0);
+            M.at<float>(1,1) = dst.at<float>(3,0);
+
+            // count inliers
+            int inliers = 0;
+            for(int i=0; i < match_size; i++){
+                Mat m1(2, 1, CV_32F, Scalar(0));
+                m1.at<float>(0,0) = (float) good_matches[z][i].first.i;
+                m1.at<float>(1,0) = (float) good_matches[z][i].first.j;
+                Mat m2(2, 1, CV_32F, Scalar(0));
+                m2 = M * m1;
+
+                float d1 = m2.at<float>(0,0) - good_matches[z][i].second.i;
+                float d2 = m2.at<float>(1,0) - good_matches[z][i].second.j;
+                if(d1*d1+d2*d2 < 1000){
+                    inliers++;
+                }
+            }
+            if(inliers > max_inliers){
+                max_inliers = inliers;
+                bestM = M.clone();
+            }
+
+        }
+        printf("max_inliers[%d]:%d\n",z,max_inliers);
+        transformation.push_back(bestM);
+    }
+}
+
+void align(){
+    printf("alignment ...\n");
+    Vec3b black(0,0,0);
+    Mat panorama(cyl[0].rows, cyl[0].cols * TOTAL_IMAGES/4, CV_8UC3, Scalar(0,0,0));
+    cyl[9].copyTo(panorama(Rect(cyl[0].cols,0,cyl[0].cols,cyl[0].rows)));
+    for(int z=8; z < TOTAL_IMAGES-1; z++){
+        float m11 = transformation[z].at<float>(0,0);
+        float m12 = transformation[z].at<float>(0,1);
+        float m21 = transformation[z].at<float>(1,0);
+        float m22 = transformation[z].at<float>(1,1);
+
+        for(int i=0; i < cyl[z].rows; i++){
+            for(int j=0; j < cyl[z].cols; j++){
+                if(cyl[z].at<Vec3b>(i,j) == black ){ continue; }
+                int new_i = i*m11 + j*m12;
+                int new_j = i*m21 + j*m22;
+                if(new_i > 0 && new_j > 0 && new_i < cyl[0].rows)
+                    panorama.at<Vec3b>(new_i,new_j+cyl[z].cols) = cyl[z].at<Vec3b>(i,j);
+            }
+        }
+
+        namedWindow( "panorama", CV_WINDOW_NORMAL );
+        imshow( "panorama", panorama );
+        waitKey(0);
     }
 }
