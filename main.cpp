@@ -49,6 +49,7 @@ int calc_dist(const Feature_Point *a, const Feature_Point *b);
 void cylindrical(bool do_cylindrical);
 void ransac();
 void align();
+void normalization(vector<pair<int,int>> *uv, vector<pair<float,float>> *norm_uv, Mat *T);
 
 int main(int argc, char *argv[])
 {
@@ -460,20 +461,35 @@ void ransac(){
             do {c = rand() % match_size;} while (a == c || b == c);
             do {d = rand() % match_size;} while (a == d || b == d || c == d);
 
-            /** sfm::normalizePoints not available on Windows**/
-            /*vector<Point> uv;
-            uv.push_back(Point(good_matches[z][a].first.i,good_matches[z][a].first.j));
-            vector<Point> norm_uv;
-            Mat T;
-            sfm::normalizePoints(uv,norm_uv,T);
-            //Mat T';
-            //sfm::normalizePoints(u'v',norm_u_v_,T');
+            /** finding homography of four points by implementing normalized DLT
+            *** but sfm::normalizePoints not available on Windows
+            **/
+            /*vector<pair<int,int>> uv;
+            uv.push_back(make_pair(good_matches[z][a].second.i,good_matches[z][a].second.j));
+            uv.push_back(make_pair(good_matches[z][b].second.i,good_matches[z][b].second.j));
+            uv.push_back(make_pair(good_matches[z][c].second.i,good_matches[z][c].second.j));
+            uv.push_back(make_pair(good_matches[z][d].second.i,good_matches[z][d].second.j));
+            vector<pair<float,float>> norm_uv;
+            Mat T(3, 3, CV_32F, Scalar(0));
+            normalization(&uv, &norm_uv, &T);
+
+            vector<pair<int,int>> u_v_;
+            u_v_.push_back(make_pair(good_matches[z][a].first.i,good_matches[z][a].first.j));
+            u_v_.push_back(make_pair(good_matches[z][b].first.i,good_matches[z][b].first.j));
+            u_v_.push_back(make_pair(good_matches[z][c].first.i,good_matches[z][c].first.j));
+            u_v_.push_back(make_pair(good_matches[z][d].first.i,good_matches[z][d].first.j));
+            vector<pair<float,float>> norm_u_v_;
+            Mat Tp(3, 3, CV_32F, Scalar(0));
+            normalization(&u_v_, &norm_u_v_, &Tp);
+
+            //sfm::normalizePoints(uv,norm_uv,T);
+            //sfm::normalizePoints(u_v_,norm_u_v_,Tp);
 
             Mat A(8, 9, CV_32F, Scalar(0.0));
-            int u[] = {norm_uv[0].x,norm_uv[1].x,norm_uv[2].x,norm_uv[3].x};
-            int v[] = {norm_uv[0].y,norm_uv[1].y,norm_uv[2].y,norm_uv[3].y};
-            int u_new[] = {norm_u_v_[0].x,norm_u_v_[1].x,norm_u_v_[2].x,norm_u_v_[3].x};
-            int v_new[] = {norm_u_v_[0].y,norm_u_v_[1].y,norm_u_v_[2].y,norm_u_v_[3].y};
+            int u[] = {norm_uv[0].first,norm_uv[1].first,norm_uv[2].first,norm_uv[3].first};
+            int v[] = {norm_uv[0].second,norm_uv[1].second,norm_uv[2].second,norm_uv[3].second};
+            int u_new[] = {norm_u_v_[0].first,norm_u_v_[1].first,norm_u_v_[2].first,norm_u_v_[3].first};
+            int v_new[] = {norm_u_v_[0].second,norm_u_v_[1].second,norm_u_v_[2].second,norm_u_v_[3].second};
 
             for(int i=0; i < 4; i++){
                 A.at<float>(i*2,3) = -u[i];    A.at<float>(i*2,4) = -v[i];    A.at<float>(i*2,5) = -1;
@@ -490,15 +506,16 @@ void ransac(){
 
             SVD::solveZ(A,h);
 
-            // h = (T')^(-1) * h * T;
-
             Mat H(3, 3, CV_32F, Scalar(0));
             H.at<float>(0,0) = h.at<float>(0,0);  H.at<float>(0,1) = h.at<float>(1,0);  H.at<float>(0,2) = h.at<float>(2,0);
             H.at<float>(1,0) = h.at<float>(3,0);  H.at<float>(1,1) = h.at<float>(4,0);  H.at<float>(1,2) = h.at<float>(5,0);
             H.at<float>(2,0) = h.at<float>(6,0);  H.at<float>(2,1) = h.at<float>(7,0);  H.at<float>(2,2) = h.at<float>(8,0);
-            */
 
-            /** give up finding homography of four points by implementing normalized DLT**/
+            Mat model;
+            model = Tp.inv() * H;
+            model = model * T;*/
+
+            /** give up finding homography of four points by implementing normalized DLT **/
             vector<Point> uv;
             uv.push_back(Point(good_matches[z][a].first.i,good_matches[z][a].first.j));
             uv.push_back(Point(good_matches[z][b].first.i,good_matches[z][b].first.j));
@@ -523,12 +540,12 @@ void ransac(){
                 m1.at<float>(0,0) = (float) good_matches[z][i].second.i;
                 m1.at<float>(1,0) = (float) good_matches[z][i].second.j;
                 m1.at<float>(2,0) = 1.0;
-                Mat m2(2, 1, CV_32F, Scalar(0));
+                Mat m2(3, 1, CV_32F, Scalar(0));
                 m2 = model * m1;
 
                 float d1 = m2.at<float>(0,0) - good_matches[z][i].first.i;
                 float d2 = m2.at<float>(1,0) - good_matches[z][i].first.j;
-                if(d1*d1+d2*d2 < 50){
+                if(d1*d1+d2*d2 < 18){
                     inliers++;
                 }
             }
@@ -663,4 +680,37 @@ void align(){
     }
     stitched = stitched(Rect(0,top_bound,right_bound,bottom_bound-top_bound));
     imwrite("panorama_cropped.jpg",stitched);
+}
+
+void normalization(vector<pair<int,int>> *uv, vector<pair<float,float>> *norm_uv, Mat *T){
+    float meanx = 0, meany = 0;
+    for(int i=0; i < uv->size(); i++){
+        meanx += uv->at(i).first;
+        meany += uv->at(i).second;
+    }
+    meanx /= uv->size();
+    meany /= uv->size();
+    float value = 0;
+    for(int i=0; i<4; i++){
+        value += sqrt(pow(uv->at(i).first - meanx, 2.0) + pow(uv->at(i).second - meany, 2.0));
+    }
+    value /= uv->size();
+
+    float scale = sqrt(2.0)/value;
+    float tx = -scale * meanx;
+    float ty = -scale * meany;
+
+    T->at<float>(0,0) = scale;                              T->at<float>(0,2) = tx;
+                                T->at<float>(1,1) = scale;  T->at<float>(1,2) = ty;
+                                                            T->at<float>(2,2) = 1.0;
+
+    for(int i=0; i < uv->size(); i++){
+        Mat x(3, 1, CV_32F, Scalar(0));
+        x.at<float>(0,0) = uv->at(i).first;
+        x.at<float>(1,0) = uv->at(i).second;
+        x.at<float>(2,0) = 1.0;
+        Mat xp(3, 1, CV_32F, Scalar(0));
+        xp = *T * x;
+        norm_uv->push_back(make_pair(xp.at<float>(0,0)/xp.at<float>(2,0), xp.at<float>(1,0)/xp.at<float>(2,0)));
+    }
 }
