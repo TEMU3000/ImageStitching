@@ -317,6 +317,7 @@ void match_fp(){
             int dist = 2147483647;
             int point_b = -1;
             for(int j=0; j < features[z+1].size(); j++){
+                /** cheating upon the knowledge of left-right image sequence **/
                 if(features[z+1][j].j > src[z+1].cols*2/3 || features[z+1][j].j > features[z][i].j){
                     continue;
                 }
