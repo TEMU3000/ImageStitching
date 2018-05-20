@@ -82,78 +82,7 @@ int main(int argc, char *argv[])
 
 int readImages(){
     printf("Reading image files ...\n");
-    /*src[0] = imread("set4/DSC_0014.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
-    src[1] = imread("set4/DSC_0015.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
-    src[2] = imread("set4/DSC_0016.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
-    src[3] = imread("set4/DSC_0017.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
-    src[4] = imread("set4/DSC_0018.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
-    src[5] = imread("set4/DSC_0019.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
-    src[6] = imread("set4/DSC_0020.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
-    src[7] = imread("set4/DSC_0021.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
-    src[8] = imread("set4/DSC_0022.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
-    src[9] = imread("set4/DSC_0023.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
-    src[10] = imread("set4/DSC_0024.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;
-    src[11] = imread("set4/DSC_0025.jpg", CV_LOAD_IMAGE_COLOR); if(src[11].empty()) return -1;*/
 
-    /*src[0] = imread("parrington/prtn17.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
-    src[1] = imread("parrington/prtn16.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
-    src[2] = imread("parrington/prtn15.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
-    src[3] = imread("parrington/prtn14.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
-    src[4] = imread("parrington/prtn13.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
-    src[5] = imread("parrington/prtn12.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
-    src[6] = imread("parrington/prtn11.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
-    src[7] = imread("parrington/prtn10.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
-    src[8] = imread("parrington/prtn09.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
-    src[9] = imread("parrington/prtn08.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
-    src[10] = imread("parrington/prtn07.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;
-    src[11] = imread("parrington/prtn06.jpg", CV_LOAD_IMAGE_COLOR); if(src[11].empty()) return -1;
-    src[12] = imread("parrington/prtn05.jpg", CV_LOAD_IMAGE_COLOR); if(src[12].empty()) return -1;
-    src[13] = imread("parrington/prtn04.jpg", CV_LOAD_IMAGE_COLOR); if(src[13].empty()) return -1;
-    src[14] = imread("parrington/prtn03.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
-    src[15] = imread("parrington/prtn02.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
-    src[16] = imread("parrington/prtn01.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;
-    src[17] = imread("parrington/prtn00.jpg", CV_LOAD_IMAGE_COLOR); if(src[17].empty()) return -1;*/
-
-    /*src[0] = imread("set1/DSC_0256.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
-    src[1] = imread("set1/DSC_0257.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
-    src[2] = imread("set1/DSC_0258.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
-    src[3] = imread("set1/DSC_0259.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
-    src[4] = imread("set1/DSC_0260.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
-    src[5] = imread("set1/DSC_0261.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
-    src[6] = imread("set1/DSC_0262.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
-    src[7] = imread("set1/DSC_0263.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
-    src[8] = imread("set1/DSC_0264.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
-    src[9] = imread("set1/DSC_0265.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;*/
-
-    /*src[0] = imread("set2/DSC_0172.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
-    src[1] = imread("set2/DSC_0173.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
-    src[2] = imread("set2/DSC_0174.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
-    src[3] = imread("set2/DSC_0175.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
-    src[4] = imread("set2/DSC_0176.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
-    src[5] = imread("set2/DSC_0177.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
-    src[6] = imread("set2/DSC_0178.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
-    src[7] = imread("set2/DSC_0179.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
-    src[8] = imread("set2/DSC_0180.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
-    src[9] = imread("set2/DSC_0181.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
-    src[10] = imread("set2/DSC_0182.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;*/
-
-    /*src[0] = imread("set5/DSC_0035.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
-    src[1] = imread("set5/DSC_0036.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
-    src[2] = imread("set5/DSC_0037.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
-    src[3] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[3].empty()) return -1;
-    src[4] = imread("set5/DSC_0039.jpg", CV_LOAD_IMAGE_COLOR); if(src[4].empty()) return -1;
-    src[5] = imread("set5/DSC_0040.jpg", CV_LOAD_IMAGE_COLOR); if(src[5].empty()) return -1;
-    src[6] = imread("set5/DSC_0041.jpg", CV_LOAD_IMAGE_COLOR); if(src[6].empty()) return -1;
-    src[7] = imread("set5/DSC_0042.jpg", CV_LOAD_IMAGE_COLOR); if(src[7].empty()) return -1;
-    src[8] = imread("set5/DSC_0026.jpg", CV_LOAD_IMAGE_COLOR); if(src[8].empty()) return -1;
-    src[9] = imread("set5/DSC_0027.jpg", CV_LOAD_IMAGE_COLOR); if(src[9].empty()) return -1;
-    src[10] = imread("set5/DSC_0028.jpg", CV_LOAD_IMAGE_COLOR); if(src[10].empty()) return -1;
-    src[11] = imread("set5/DSC_0029.jpg", CV_LOAD_IMAGE_COLOR); if(src[11].empty()) return -1;
-    src[12] = imread("set5/DSC_0030.jpg", CV_LOAD_IMAGE_COLOR); if(src[12].empty()) return -1;
-    src[13] = imread("set5/DSC_0031.jpg", CV_LOAD_IMAGE_COLOR); if(src[13].empty()) return -1;
-    src[14] = imread("set5/DSC_0032.jpg", CV_LOAD_IMAGE_COLOR); if(src[14].empty()) return -1;
-    src[15] = imread("set5/DSC_0033.jpg", CV_LOAD_IMAGE_COLOR); if(src[15].empty()) return -1;
-    src[16] = imread("set5/DSC_0034.jpg", CV_LOAD_IMAGE_COLOR); if(src[16].empty()) return -1;*/
     src[0] = imread("set5/DSC_0038.jpg", CV_LOAD_IMAGE_COLOR); if(src[0].empty()) return -1;
     src[1] = imread("set5/DSC_0039.jpg", CV_LOAD_IMAGE_COLOR); if(src[1].empty()) return -1;
     src[2] = imread("set5/DSC_0040.jpg", CV_LOAD_IMAGE_COLOR); if(src[2].empty()) return -1;
@@ -569,74 +498,48 @@ void align(){
     printf("alignment ...\n");
     Vec3b black(0,0,0);
 
-    Mat stitched(cyl[TOTAL_IMAGES-1].rows*2, cyl[TOTAL_IMAGES-1].cols, CV_8UC3, Scalar(0,0,0));
-    cyl[TOTAL_IMAGES-1].copyTo(stitched(Rect(0,cyl[TOTAL_IMAGES-1].rows/2,cyl[TOTAL_IMAGES-1].cols,cyl[TOTAL_IMAGES-1].rows)));
+    Mat stitched(cyl[0].rows*2, cyl[0].cols * TOTAL_IMAGES * 3/5, CV_8UC3, Scalar(0,0,0));
+    cyl[0].copyTo( stitched( Rect(0, cyl[0].rows/2, cyl[0].cols, cyl[0].rows) ) );
 
-    for(int z=TOTAL_IMAGES-1; z > 0; z--){
-        printf("  image %d ...\n",z);
-        Mat stitching_base(cyl[z-1].rows*2, cyl[z-1].cols * ((TOTAL_IMAGES-1-z)/2+2), CV_8UC3, Scalar(0,0,0));
+    for(int z = 1; z < TOTAL_IMAGES; z++){
+        printf("  stitching image %d/%d ...\n",z, TOTAL_IMAGES-1);
 
-        cyl[z-1].copyTo(stitching_base(Rect(0,cyl[z-1].rows/2,cyl[z-1].cols,cyl[z-1].rows)));
-
-        for(int i=0; i < stitched.rows; i++){
-            for(int j=0; j < stitched.cols; j++){
-                if(stitched.at<Vec3b>(i,j) == black ){ continue; }
+        for(int i=0; i < cyl[z].rows; i++){
+            for(int j=0; j < cyl[z].cols; j++){
+                if(cyl[z].at<Vec3b>(i,j) == black ){ continue; }
 
                 Mat m1(3, 1, CV_32F, Scalar(0));
-                m1.at<float>(0,0) = (float) i - cyl[z-1].rows/2;
+                m1.at<float>(0,0) = (float) i;
                 m1.at<float>(1,0) = (float) j;
                 m1.at<float>(2,0) = 1.0;
                 Mat m2(3, 1, CV_32F, Scalar(0));
 
-                m2 = transformation[z-1] * m1;
+                for(int k = z-1; k >= 0; k--){
+                    m2 = transformation[k] * m1;
+                    m1.at<float>(0,0) = m2.at<float>(0,0);
+                    m1.at<float>(1,0) = m2.at<float>(1,0);
+                    m1.at<float>(2,0) = 1.0;
+                }
 
-                int new_i = (int) (m2.at<float>(0,0)) + cyl[z-1].rows/2;
+                int new_i = (int) (m2.at<float>(0,0)) + cyl[0].rows/2;
                 int new_j = (int) (m2.at<float>(1,0));
-                if(new_i > 1 && new_i < cyl[z-1].rows*2-1){
-                    if(new_i >= cyl[z-1].rows/2 && new_i < cyl[z-1].rows*3/2 && new_j < cyl[z-1].cols && stitching_base.at<Vec3b>(new_i, new_j) != black){
+
+                if(new_i >= 0 && new_i < stitched.rows-1 && new_j >= 0 && new_j < stitched.cols-1){
+                    if(stitched.at<Vec3b>(new_i, new_j) != black){
                         /** overlapping, blend pixels **/
                         double alpha, beta;
-                        alpha = (double)(new_j-cyl[z-1].cols/2) / (double)(cyl[z-1].cols/2);
-                        alpha = alpha < 0.0 ? 0.0 : alpha;
+                        alpha = (double)(j) / (double)(cyl[z].cols/2);
+                        alpha = alpha > 1.0 ? 1.0 : alpha;
                         beta = 1.0 - alpha;
-                        addWeighted( stitched.at<Vec3b>(i,j), alpha, stitching_base.at<Vec3b>(new_i, new_j), beta, 0.0, stitching_base.at<Vec3b>(new_i, new_j));
+                        addWeighted( cyl[z].at<Vec3b>(i,j), alpha, stitched.at<Vec3b>(new_i, new_j), beta, 0.0, stitched.at<Vec3b>(new_i, new_j));
                     } else {
-                        //stitching_base.at<Vec3b>(new_i-1, new_j) = stitched.at<Vec3b>(i,j);
-                        //stitching_base.at<Vec3b>(new_i, new_j-1) = stitched.at<Vec3b>(i,j);
-                        stitching_base.at<Vec3b>(new_i, new_j) = stitched.at<Vec3b>(i,j);
-                        stitching_base.at<Vec3b>(new_i+1, new_j) = stitched.at<Vec3b>(i,j);
-                        stitching_base.at<Vec3b>(new_i, new_j+1) = stitched.at<Vec3b>(i,j);
+                        stitched.at<Vec3b>(new_i, new_j) = cyl[z].at<Vec3b>(i,j);
+                        stitched.at<Vec3b>(new_i+1, new_j) = cyl[z].at<Vec3b>(i,j);
+                        stitched.at<Vec3b>(new_i, new_j+1) = cyl[z].at<Vec3b>(i,j);
                     }
                 }
             }
         }
-
-        for(int i=1; i < stitching_base.rows-1; i++){
-            for(int j=1; j < stitching_base.cols-1; j++){
-                if(stitching_base.at<Vec3b>(i,j) == black){
-                    int color_count = 0;
-                    if(stitching_base.at<Vec3b>(i-1,j) != black){
-                        color_count++;
-                    }
-                    if(stitching_base.at<Vec3b>(i,j-1) != black){
-                        color_count++;
-                    }
-                    if(stitching_base.at<Vec3b>(i+1,j) != black){
-                        color_count++;
-                    }
-                    if(stitching_base.at<Vec3b>(i,j+1) != black){
-                        color_count++;
-                    }
-                    if(color_count >= 3){
-                        stitching_base.at<Vec3b>(i,j) = stitching_base.at<Vec3b>(i-1,j) != black ?
-                                                        stitching_base.at<Vec3b>(i-1,j) :
-                                                        stitching_base.at<Vec3b>(i,j-1);
-                    }
-                }
-            }
-        }
-
-        stitched = stitching_base.clone();
 
         /** show stitched so far **/
         /*namedWindow( "panorama", CV_WINDOW_NORMAL );
@@ -680,7 +583,51 @@ void align(){
         }
     }
     stitched = stitched(Rect(0,top_bound,right_bound,bottom_bound-top_bound));
-    imwrite("panorama_cropped.jpg",stitched);
+
+    //imwrite("panorama_cropped.jpg",stitched);
+
+    /** warpAffine **/
+    Point2f srcTri[3];
+    Point2f dstTri[3];
+    srcTri[0] = Point2f( 0,cyl[0].rows/2 - top_bound);
+
+    Mat m1(3, 1, CV_32F, Scalar(0));
+    m1.at<float>(0,0) = 0;
+    m1.at<float>(1,0) = cyl[TOTAL_IMAGES-1].cols-1;
+    m1.at<float>(2,0) = 1.0;
+    Mat m2(3, 1, CV_32F, Scalar(0));
+    for(int k = TOTAL_IMAGES-2; k >= 0; k--){
+        m2 = transformation[k] * m1;
+        m1.at<float>(0,0) = m2.at<float>(0,0);
+        m1.at<float>(1,0) = m2.at<float>(1,0);
+        m1.at<float>(2,0) = 1.0;
+    }
+    srcTri[1] = Point2f( (m2.at<float>(1,0)), (m2.at<float>(0,0)) + cyl[0].rows/2 - top_bound);
+
+    m1.at<float>(0,0) = cyl[TOTAL_IMAGES-1].rows-1;
+    m1.at<float>(1,0) = cyl[TOTAL_IMAGES-1].cols-1;
+    m1.at<float>(2,0) = 1.0;
+    for(int k = TOTAL_IMAGES-2; k >= 0; k--){
+        m2 = transformation[k] * m1;
+        m1.at<float>(0,0) = m2.at<float>(0,0);
+        m1.at<float>(1,0) = m2.at<float>(1,0);
+        m1.at<float>(2,0) = 1.0;
+    }
+    srcTri[2] = Point2f( (m2.at<float>(1,0)), (m2.at<float>(0,0)) + cyl[0].rows/2  - top_bound);
+
+    dstTri[0] = Point2f( 0 ,cyl[0].rows/2 - top_bound);
+    dstTri[1] = Point2f( stitched.cols-1 ,cyl[0].rows/2 - top_bound );
+    dstTri[2] = Point2f( stitched.cols-1 ,stitched.rows - 1);
+
+    Mat warp_mat( 2, 3, CV_32FC1 );
+    warp_mat = getAffineTransform( srcTri, dstTri );
+    warpAffine( stitched, stitched, warp_mat, stitched.size() );
+
+    //imwrite("panorama_wrap.jpg",stitched);
+
+    stitched = stitched(Rect(0, cyl[0].rows/2 - top_bound, stitched.cols, stitched.rows - (cyl[0].rows/2 - top_bound) ));
+
+    imwrite("panorama.jpg",stitched);
 }
 
 void normalization(vector<pair<int,int>> *uv, vector<pair<float,float>> *norm_uv, Mat *T){
